@@ -1,4 +1,4 @@
-name: Deploy WebGL to Vercel
+name: Deploy WebGL to GitHub Pages
 
 on:
   push:
@@ -16,13 +16,17 @@ jobs:
           fetch-depth: 0
           lfs: true # LFSファイルを確実にダウンロード
 
-      # 2. Vercel CLI のインストール
-      - name: Install Vercel CLI
-        run: npm install -g vercel
+      # 2. GitHub Pages の設定
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
 
-      # 3. Vercelへのデプロイ
-      - name: Deploy to Vercel
-        run: vercel deploy --prod --token ${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      # 3. WebGL ビルドファイルのアップロード
+      - name: Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: . # リポジトリのルート (index.html, Build/など全て) を指定
+
+      # 4. GitHub Pagesへのデプロイ
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
