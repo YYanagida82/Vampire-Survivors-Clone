@@ -9,6 +9,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write # <-- Pagesへの書き込み権限
+      id-token: write # <-- OIDC (認証トークン) の発行権限
+
     steps:
       # 1. リポジトリをクローン (LFSファイルを含めてダウンロード)
       - uses: actions/checkout@v4
